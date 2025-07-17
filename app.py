@@ -7,7 +7,7 @@
 import sys
 
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QEventLoop, QTimer, Qt
+from PyQt5.QtCore import QEventLoop, QTimer, Qt, QEvent
 from PyQt5.QtGui import QKeyEvent
 
 from src.main_widget import MainWidget
@@ -27,8 +27,8 @@ if __name__ == "__main__":
 if __name__ == "__main__":
     import os
     SETTINGS_PATH = os.path.join(os.path.dirname(__file__), "settings.json")
-    HOST = "192.168.1.184"
-    PORT = 23
+    HOST = "0.0.0.0"
+    PORT = 2323
 
     network_manager = NetworkManager(HOST, PORT, SETTINGS_PATH)
 
@@ -57,18 +57,20 @@ if __name__ == "__main__":
         print(f"Failed to connect to hardware or receive initial settings. Exiting.\n{settings_received}\n")
         sys.exit(1)
 
+    # At this point, the timeout is no longer needed and will not affect further network operations.
+
     window = MainWidget()
     # Example: connect IR data to controller
     if hasattr(window, 'controller'):
         def handle_ir(ir_value):
-            print(f"IR Received: {ir_value}")
+            print(f"[DEBUG] IR Received: {ir_value}")
             if ir_value == 1:
-                # QKeyEvent.KeyPress = 6, Qt.Key_Right = 16777236, Qt.NoModifier = 0
-                event = QKeyEvent(6, 16777236, 0)
+                event = QKeyEvent(QEvent.KeyPress, Qt.Key_Right, Qt.NoModifier)
+                print(f"[DEBUG] Sending Qt.Key_Right event to window.keyPressEvent")
                 window.keyPressEvent(event)
             elif ir_value == 2:
-                # QKeyEvent.KeyPress = 6, Qt.Key_Return = 16777220, Qt.NoModifier = 0
-                event = QKeyEvent(6, 16777220, 0)
+                event = QKeyEvent(QEvent.KeyPress, Qt.Key_Return, Qt.NoModifier)
+                print(f"[DEBUG] Sending Qt.Key_Return event to window.keyPressEvent")
                 window.keyPressEvent(event)
             elif ir_value == 4:
                 print("Emergency! Send notification to Firebase.")
@@ -82,6 +84,7 @@ if __name__ == "__main__":
     # Patch MainWidget to send notification on special key
     orig_keyPressEvent = window.keyPressEvent
     def patched_keyPressEvent(event):
+        print(f"[DEBUG] MainWidget.keyPressEvent called with event: {event.key()}")
         orig_keyPressEvent(event)
         # Check for special keys after handling
         text = window.text_display.text()

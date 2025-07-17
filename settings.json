@@ -1,7 +1,7 @@
 {
-  "wifi_ssid": "YourWiFiNetwork",
-  "password": "YourWiFiPassword",
-  "minBlinkDuration": 1000,
-  "blinkInterval": 340,
-  "userID": "Fn24L"
+  "wifi_ssid": "Test69",
+  "password": "04passt",
+  "minBlinkDuration": 440,
+  "blinkInterval": 1120,
+  "userID": "BCF45"
 }

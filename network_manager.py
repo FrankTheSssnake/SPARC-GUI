@@ -1,5 +1,4 @@
 import socket
-import threading
 import json
 import os
 from PyQt5.QtCore import QObject, pyqtSignal, QThread
@@ -19,7 +18,8 @@ class NetworkWorker(QObject):
 
     def run(self):
         try:
-            self.sock = socket.create_connection((self.host, self.port), timeout=10)
+            self.sock = socket.create_connection((self.host, self.port))
+            # self.sock.settimeout(None)  # Set to blocking mode after connecting
             print("Connection Created.\n")
             try:
                 # Receive initial settings
@@ -91,17 +91,12 @@ class NetworkWorker(QObject):
     def send_setting(self, key, value):
         if self.sock:
             if key == 'minBlinkDuration':
-                msg = f"SET_MINBLINK:{value}".encode()
+                msg = f"SET_MINBLINK:{value}\n".encode()
             elif key == 'blinkInterval':
-                msg = f"SET_BLINKINT:{value}".encode()
+                msg = f"SET_BLINKINT:{value}\n".encode()
             else:
-                msg = f"{key}={value}".encode()
+                msg = f"{key}={value}\n".encode()
             self.sock.sendall(msg)
-
-    def send_wifi(self, ssid, password):
-        if self.sock:
-            self.sock.sendall(f"wifi={ssid}".encode())
-            self.sock.sendall(f"password={password}".encode())
 
 class NetworkManager:
     def __init__(self, host, port, settings_path):
@@ -129,6 +124,3 @@ class NetworkManager:
 
     def send_setting(self, key, value):
         self.worker.send_setting(key, value)
-
-    def send_wifi(self, ssid, password):
-        self.worker.send_wifi(ssid, password)

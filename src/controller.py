@@ -103,7 +103,7 @@ class Controller:
                         self.mode = "char_select"
 
                         self.popup.show_popup(self.current_chars, self.buttons[self.current_index])
-                        self.timer.start(2000)
+                        self.timer.start(5000)
 
                     case "char_select":
                         char = self.popup.get_selected_char()

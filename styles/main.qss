@@ -49,4 +49,6 @@ QLabel[popup_char="true"] {
 QLabel[popup_char="true"][selected="true"] {
     color: yellow;
     font-weight: bold;
+    background-color: #44475a;
+    border-radius: 6px;
 }

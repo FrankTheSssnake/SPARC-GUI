@@ -11,8 +11,8 @@ class Popup(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-        # self.setAttribute(Qt.WA_TransparentForMouseEvents)
+        self.setWindowFlags(Qt.ToolTip | Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.setFocusPolicy(Qt.NoFocus)
         self.setAttribute(Qt.WA_ShowWithoutActivating)
         self.setObjectName("Popup")

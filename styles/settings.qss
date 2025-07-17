@@ -1,0 +1,120 @@
+QLabel {
+    color: #ECEFF4;
+}
+
+QLabel[class="title"] {
+    color: #ECEFF4;
+    font-size: 40px;
+    font-weight: bold;
+    padding-top: 20px;
+}
+
+/* Main settings window background */
+QWidget#SettingsWindow {
+    background-color: #232936;
+    color: #ECEFF4;
+}
+
+/* Group box (e.g. for sections like blink duration) */
+QGroupBox {
+    font-weight: bold;
+    border: 2px solid #88C0D0;
+    border-radius: 8px;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+QGroupBox#wifiGroup {
+    height: 200px;
+}
+
+QGroupBox#blinkGroup QGroupBox#gapGroup {
+    min-height: 10px;
+    height: 10px;
+    background-color: #000000;
+}
+
+QGroupBox::title {
+    color: #ECEFF4;
+    subcontrol-origin: margin;
+    left: 10px;
+    padding: 0 5px 0 5px;
+    min-height: 25px;
+}
+
+/* Input fields */
+QLineEdit {
+    background-color: #3B4252;
+    border: 2px solid #4C566A;
+    border-radius: 6px;
+    padding: 8px;
+    color: #ECEFF4;
+    font-size: 14px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #88C0D0;
+}
+
+/* Blink duration label (read-only styled QLabel) */
+QLabel[class="blink-duration"] QLabel[class="gap-duration"] {
+    background-color: #3B4252;
+    border: 2px solid #4C566A;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    qproperty-alignment: AlignCenter;
+}
+
+QPushButton.inc, QPushButton.dec {
+    background-color: #4C566A;
+    color: #ECEFF4;
+    border: 1px solid #81A1C1;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-weight: bold;
+    font-size: 12px;
+    min-width: 24px;
+    max-width: 30px;
+    min-height: 20px;
+    max-height: 22px;
+}
+
+QPushButton.inc:hover {
+    background-color: #81A1C1;
+}
+
+QPushButton.dec:hover {
+    background-color: #D08770;
+}
+
+/* Save button */
+QPushButton.save {
+    background-color: #5E81AC;
+    color: #ECEFF4;
+    border: 2px solid #81A1C1;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: bold;
+    height: 15px;
+}
+
+QPushButton.save:hover {
+    background-color: #81A1C1;
+}
+
+/* Cancel button */
+QPushButton.cancel {
+    background-color: #BF616A;
+    color: #ECEFF4;
+    border: 2px solid #D08770;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-weight: bold;
+    height: 15px;
+}
+
+QPushButton.cancel:hover {
+    background-color: #D08770;
+}

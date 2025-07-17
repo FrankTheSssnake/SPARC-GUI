@@ -76,7 +76,8 @@ if __name__ == "__main__":
                 print("Emergency! Send notification to Firebase.")
                 status, resp = notifier.send_topic_notification(
                     title="Emergency Alert!",
-                    body="Emergency IR signal received from user."
+                    body="Emergency IR signal received from user.",
+                    notif_type="EMERGENCY"
                 )
                 print(f"Notification sent: {status}, {resp}")
         network_manager.ir_signal.connect(handle_ir)
@@ -91,18 +92,47 @@ if __name__ == "__main__":
         if text and text[-1] in ["🍽️", "🚽", "📞"]:
             if text[-1] == "🍽️":
                 body = "Meal notification triggered by user."
+                notif_type = "FOOD"
             elif text[-1] == "🚽":
                 body = "Restroom notification triggered by user."
+                notif_type = "RESTROOM"
             elif text[-1] == "📞":
                 body = "Call notification triggered by user."
+                notif_type = "DOCTOR_CALL"
             else:
                 body = "Special notification triggered by user."
+                notif_type = None
             status, resp = notifier.send_topic_notification(
                 title="User Request",
-                body=body
+                body=body,
+                notif_type=notif_type
             )
-            print(f"Notification sent: {status}, {resp}")
+            print('Bruh?')
+            print(f"Notification sent: {status}, {resp}\nNotif:-\n{body}\n{notif_type}")
     window.keyPressEvent = patched_keyPressEvent
+
+    # Patch on_special_key to send notification for special emoji
+    def send_special_notification(char):
+        if char == "🍽️":
+            body = "Meal notification triggered by user."
+            notif_type = "FOOD"
+        elif char == "🚽":
+            body = "Restroom notification triggered by user."
+            notif_type = "RESTROOM"
+        elif char == "📞":
+            body = "Call notification triggered by user."
+            notif_type = "DOCTOR_CALL"
+        else:
+            body = "Special notification triggered by user."
+            notif_type = None
+        status, resp = notifier.send_topic_notification(
+            title="User Request",
+            body=body,
+            notif_type=notif_type
+        )
+        print(f"Notification sent: {status}, {resp}\nNotif:-\n{body}\n{notif_type}", flush=True)
+
+    window.on_special_key = send_special_notification
     window.show()
     sys.exit(app.exec_())
 """

@@ -1,7 +1,7 @@
 {
-  "wifi_ssid": "Test69",
-  "password": "04passt",
-  "minBlinkDuration": 440,
-  "blinkInterval": 1120,
-  "userID": "BCF45"
+  "wifi_ssid": "Test",
+  "password": "09pass",
+  "minBlinkDuration": 400,
+  "blinkInterval": 2060,
+  "userID": "AB123"
 }

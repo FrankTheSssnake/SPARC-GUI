@@ -22,7 +22,7 @@ class FCMNotifier:
         self._creds.refresh(request)
         self._access_token = self._creds.token
 
-    def send_topic_notification(self, title, body, data=None):
+    def send_topic_notification(self, title, body, notif_type=None):
         # Load userID from settings.json
         if not os.path.exists(self.settings_path):
             raise FileNotFoundError(f"Settings file not found: {self.settings_path}")
@@ -35,15 +35,21 @@ class FCMNotifier:
             self._refresh_token()
         message = {
             "message": {
-                "topic": topic,
                 "notification": {
                     "title": title,
                     "body": body
-                }
+                },
+                "topic": topic
             }
         }
-        if data:
-            message["message"]["data"] = data
+        if notif_type:
+            message["message"]["data"] = {"type": notif_type}
+        # If data is provided as a dict, merge it
+        # (for backward compatibility, if needed)
+        # if data:
+        #     if "data" not in message["message"]:
+        #         message["message"]["data"] = {}
+        #     message["message"]["data"].update(data)
         headers = {
             "Authorization": f"Bearer {self._access_token}",
             "Content-Type": "application/json"

@@ -79,6 +79,7 @@ class MainWidget(QWidget):
         self.controller.highlight_button(0)
 
         self.tts_engine = pyttsx3.init()
+        self.tts_engine.setProperty('rate', 120)
 
     def init_main_ui(self):
         """Initialize the main T9 interface"""
@@ -113,6 +114,7 @@ class MainWidget(QWidget):
                     btn.setToolTip("Settings")
                     btn.setProperty("t9_key", key)
                     btn.setFocusPolicy(Qt.NoFocus)
+                    btn.clicked.connect(self.show_settings)
                 else:
                     if len(T9_KEYS[key]) > 2:
                         letters = ' '.join(T9_KEYS[key][:-1])
@@ -144,23 +146,6 @@ class MainWidget(QWidget):
 
     def on_special_key(self, char):
         # Send notification for special keys
-        if char == "🍽️":
-            body = "Meal notification triggered by user."
-        elif char == "🚽":
-            body = "Restroom notification triggered by user."
-        elif char == "📞":
-            body = "Call notification triggered by user."
-        else:
-            body = "Special notification triggered by user."
-        try:
-            from notif import FCMNotifier
-            notifier = FCMNotifier('service-account.json', 'sparc-8b7af')
-            status, resp = notifier.send_topic_notification(
-                title="User Request",
-                body=body
-            )
-            print(f"Notification sent: {status}, {resp}")
-        except Exception as e:
-            print(f"Failed to send notification: {e}")
+        pass
     def keyPressEvent(self, event):
         self.controller.handle_key(event)

@@ -1,6 +1,7 @@
 {
-  "wifi_name": "gjyugy",
-  "wifi_password": "ggjg",
-  "blink_duration": 1300,
-  "blink_gap": 375
+  "wifi_ssid": "YourWiFiNetwork",
+  "password": "YourWiFiPassword",
+  "minBlinkDuration": 1000,
+  "blinkInterval": 340,
+  "userID": "Fn24L"
 }

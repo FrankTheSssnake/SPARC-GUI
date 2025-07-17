@@ -1,5 +1,5 @@
 QWidget#MainWindow {
-    background-color:rgb(0, 0, 0);
+    background-color: #232936;
 }
 
 QLabel#textDisplay, QLineEdit#textDisplay {
@@ -32,14 +32,17 @@ QPushButton:focus, QPushButton[selected="true"] {
 }
 
 QWidget#Popup {
-    background-color: #2E3440;
+    background-color:rgb(46, 51, 63);
     border: 2px solid #88C0D0;
     border-radius: 8px;
+    min-width: 100px;
+    min-height: 80px;
+    font-size: 200px;
 }
 
 QLabel[popup_char="true"] {
     color: white;
-    font-size: 16px;
+    font-size: 32px;
     padding: 4px;
 }
 

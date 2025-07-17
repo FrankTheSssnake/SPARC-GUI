@@ -162,3 +162,5 @@ class MainWidget(QWidget):
             print(f"Notification sent: {status}, {resp}")
         except Exception as e:
             print(f"Failed to send notification: {e}")
+    def keyPressEvent(self, event):
+        self.controller.handle_key(event)

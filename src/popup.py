@@ -3,8 +3,6 @@
 @brief Implements the cell popup (renamed to Popup)
 """
 
-import os
-
 from PyQt5.QtWidgets import QWidget, QLabel, QHBoxLayout
 from PyQt5.QtCore import Qt, QEvent
 
@@ -14,7 +12,7 @@ class Popup(QWidget):
         super().__init__(parent)
 
         self.setWindowFlags(Qt.Popup | Qt.FramelessWindowHint)
-        self.setAttribute(Qt.WA_TransparentForMouseEvents)
+        # self.setAttribute(Qt.WA_TransparentForMouseEvents)
         self.setFocusPolicy(Qt.NoFocus)
         self.setAttribute(Qt.WA_ShowWithoutActivating)
         self.setObjectName("Popup")
@@ -50,10 +48,15 @@ class Popup(QWidget):
 
         self.update_highlight()
 
-        # Position the popup relative to the selected T9 button
-        global_pos = anchor_widget.mapToGlobal(anchor_widget.rect().bottomLeft())
-        self.move(global_pos.x(), global_pos.y() + 5)
+        # Position the popup centered relative to the selected T9 button
         self.adjustSize()
+        anchor_rect = anchor_widget.rect()
+        anchor_global = anchor_widget.mapToGlobal(anchor_rect.topLeft())
+        anchor_width = anchor_rect.width()
+        popup_width = self.width()
+        x = anchor_global.x() + (anchor_width - popup_width) // 2
+        y = anchor_global.y() + anchor_rect.height() + 5
+        self.move(x, y)
 
         self.show()
 

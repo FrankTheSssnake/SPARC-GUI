@@ -121,6 +121,12 @@ class Controller:
                                 self.window.text_display.setText("")
                             case "␣":
                                 self.window.text_display.setText(self.window.text_display.text() + " ")
+                            case ".":
+                                text = self.window.text_display.text()
+                                if text and hasattr(self.window, 'tts_engine'):
+                                    self.window.tts_engine.say(text)
+                                    self.window.tts_engine.runAndWait()
+                                self.window.text_display.setText("")
                             case _:
                                 self.window.text_display.setText(self.window.text_display.text() + char)
 

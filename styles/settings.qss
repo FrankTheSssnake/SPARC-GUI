@@ -28,10 +28,17 @@ QGroupBox#wifiGroup {
     height: 200px;
 }
 
-QGroupBox#blinkGroup QGroupBox#gapGroup {
+QGroupBox#blinkGroup, QGroupBox#gapGroup {
     min-height: 10px;
-    height: 10px;
-    background-color: #000000;
+    max-height: 100px;
+    background-color: #232936;
+    qproperty-alignment: AlignLeft;
+}
+
+QGroupBox#blinkGroup QLabel,
+QGroupBox#gapGroup QLabel {
+    text-align: left;
+    qproperty-alignment: AlignLeft;
 }
 
 QGroupBox::title {
@@ -57,14 +64,15 @@ QLineEdit:focus {
 }
 
 /* Blink duration label (read-only styled QLabel) */
-QLabel[class="blink-duration"] QLabel[class="gap-duration"] {
-    background-color: #3B4252;
+QLabel[class="blink-duration"], QLabel[class="gap-duration"] {
+    background-color: #4C566A;
     border: 2px solid #4C566A;
     border-radius: 6px;
     padding: 8px 16px;
     font-size: 16px;
     font-weight: bold;
-    qproperty-alignment: AlignCenter;
+    max-width: 100px;
+    qproperty-alignment: AlignLeft;
 }
 
 QPushButton.inc, QPushButton.dec {
@@ -89,15 +97,31 @@ QPushButton.dec:hover {
     background-color: #D08770;
 }
 
+QLabel[class="user-id"] {
+    color:rgb(162, 158, 159);
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px 0 0 0;
+    qproperty-alignment: AlignHCenter;
+    text-align: center;
+    font-style: italic;
+}
+
+QPushButton.save, QPushButton.cancel {
+    color: #ECEFF4;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 25px;
+    font-weight: bold;
+    max-height: 30px;
+    min-height: 30px;
+}
+
 /* Save button */
 QPushButton.save {
     background-color: #5E81AC;
-    color: #ECEFF4;
     border: 2px solid #81A1C1;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-weight: bold;
-    height: 15px;
+    
 }
 
 QPushButton.save:hover {
@@ -107,12 +131,7 @@ QPushButton.save:hover {
 /* Cancel button */
 QPushButton.cancel {
     background-color: #BF616A;
-    color: #ECEFF4;
-    border: 2px solid #D08770;
-    border-radius: 6px;
-    padding: 10px 20px;
-    font-weight: bold;
-    height: 15px;
+    border: 2px solid #D08770;;
 }
 
 QPushButton.cancel:hover {

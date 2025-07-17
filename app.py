@@ -15,10 +15,11 @@ from src.settings import Settings
 from network_manager import NetworkManager
 from notif import FCMNotifier
 
-"""
+# """
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWidget()
+    # window = Settings()
     window.show()
     sys.exit(app.exec_())
 """
@@ -101,3 +102,4 @@ if __name__ == "__main__":
     window.keyPressEvent = patched_keyPressEvent
     window.show()
     sys.exit(app.exec_())
+"""

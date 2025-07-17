@@ -62,16 +62,18 @@ class Settings(QWidget):
         main_layout = QHBoxLayout()
 
         # Left: duration label block
+        blink_label_widget = QWidget()
+        blink_label_widget.setObjectName("blinkLabelWidget")
         label_block = QVBoxLayout()
-        label_block.addWidget(QLabel("Current Duration:"))
+        label_block.addWidget(QLabel("Current Duration (Default = 400ms):"))
         self.blink_duration_label = QLabel("1000 ms")
         self.blink_duration_label.setProperty("class", "blink-duration")
         label_block.addWidget(self.blink_duration_label)
         label_block.addStretch()  # optional, keeps label block top-aligned
+        blink_label_widget.setLayout(label_block)
 
         # Right: vertical layout for +/- buttons
         button_block = QVBoxLayout()
-        button_block.setSpacing(2)
         button_block.setContentsMargins(0, 0, 0, 0)
 
         self.increase_btn = QPushButton("+")
@@ -86,16 +88,11 @@ class Settings(QWidget):
         button_block.addWidget(self.decrease_btn)
 
         # Add both blocks to the main layout
-        main_layout.addLayout(label_block)
+        main_layout.addWidget(blink_label_widget)
         main_layout.addLayout(button_block)
 
         blink_group.setLayout(main_layout)
         layout.addWidget(blink_group)
-
-        # Add userID display after blink settings
-        self.user_id_label = QLabel("")
-        self.user_id_label.setProperty("class", "user-id")
-        layout.addWidget(self.user_id_label)
 
         # Create group box
         gap_group = QGroupBox("Gap Duration")
@@ -105,16 +102,18 @@ class Settings(QWidget):
         gap_layout = QHBoxLayout()
 
         # Left: duration label block
+        gap_label_widget = QWidget()
+        gap_label_widget.setObjectName("gapLabelWidget")
         gap_label_block = QVBoxLayout()
-        gap_label_block.addWidget(QLabel("Current Duration:"))
+        gap_label_block.addWidget(QLabel("Current Duration (Default = 1200ms):"))
         self.gap_duration_label = QLabel("500 ms")
         self.gap_duration_label.setProperty("class", "gap-duration")
         gap_label_block.addWidget(self.gap_duration_label)
         gap_label_block.addStretch()  # keeps label block top-aligned
+        gap_label_widget.setLayout(gap_label_block)
 
         # Right: vertical layout for +/- buttons
         gap_button_block = QVBoxLayout()
-        gap_button_block.setSpacing(2)
         gap_button_block.setContentsMargins(0, 0, 0, 0)
 
         self.increase_gap_btn = QPushButton("+")
@@ -129,12 +128,16 @@ class Settings(QWidget):
         gap_button_block.addWidget(self.decrease_gap_btn)
 
         # Add both blocks to the main layout
-        gap_layout.addLayout(gap_label_block)
+        gap_layout.addWidget(gap_label_widget)
         gap_layout.addLayout(gap_button_block)
 
         gap_group.setLayout(gap_layout)
         layout.addWidget(gap_group)
 
+        # Move userID display after gap settings
+        self.user_id_label = QLabel("")
+        self.user_id_label.setProperty("class", "user-id")
+        layout.addWidget(self.user_id_label)
 
         bottom_button_layout = QHBoxLayout()
 
@@ -179,7 +182,8 @@ class Settings(QWidget):
                 'wifi_ssid': self.wifi_name_input.text(),
                 'password': self.wifi_password_input.text(),
                 'minBlinkDuration': self.blink_duration,
-                'blinkInterval': self.gap_duration
+                'blinkInterval': self.gap_duration,
+                'userID': self.user_id_label.text().replace('User ID: ', '')
             }
             with open(self.settings_file, 'w') as f:
                 json.dump(settings, f, indent=2)
@@ -208,28 +212,28 @@ class Settings(QWidget):
 
     def increase_blink_duration(self):
         self._play_audio('play_plus')
-        self.blink_duration += 50
+        self.blink_duration += 10
         if self.blink_duration > 2000:
             self.blink_duration = 2000
         self.update_blink_duration_label()
 
     def decrease_blink_duration(self):
         self._play_audio('play_minus')
-        self.blink_duration -= 50
+        self.blink_duration -= 10
         if self.blink_duration < 100:
             self.blink_duration = 100
         self.update_blink_duration_label()
 
     def increase_gap_duration(self):
         self._play_audio('play_plus')
-        self.gap_duration += 25
+        self.gap_duration += 20
         if self.gap_duration > 5000:
             self.gap_duration = 5000
         self.gap_duration_label.setText(f"{self.gap_duration} ms")
 
     def decrease_gap_duration(self):
         self._play_audio('play_minus')
-        self.gap_duration -= 25
+        self.gap_duration -= 20
         if self.gap_duration < 500:
             self.gap_duration = 500
         self.gap_duration_label.setText(f"{self.gap_duration} ms")

@@ -82,7 +82,7 @@ class Controller:
                     case "char_select":
                         self.popup.next_char()
                         # Restart timer on navigation to prevent premature timeout
-                        self.timer.start(2000)
+                        self.timer.start(5000)
 
             case Qt.Key_Return | Qt.Key_Enter:
                 # Play confirm sound when confirming a cell (showing popup) or confirming a character

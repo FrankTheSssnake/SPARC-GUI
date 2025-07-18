@@ -11,24 +11,15 @@ from PyQt5.QtCore import QEventLoop, QTimer, Qt, QEvent
 from PyQt5.QtGui import QKeyEvent
 
 from src.main_widget import MainWidget
-from src.settings import Settings
 from network_manager import NetworkManager
 from notif import FCMNotifier
 
-# """
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    window = MainWidget()
-    # window = Settings()
-    window.show()
-    sys.exit(app.exec_())
-"""
 
 if __name__ == "__main__":
     import os
     SETTINGS_PATH = os.path.join(os.path.dirname(__file__), "settings.json")
-    HOST = "0.0.0.0"
-    PORT = 2323
+    HOST = "192.168.1.13"
+    PORT = 33333
 
     network_manager = NetworkManager(HOST, PORT, SETTINGS_PATH)
 
@@ -64,6 +55,16 @@ if __name__ == "__main__":
     if hasattr(window, 'controller'):
         def handle_ir(ir_value):
             print(f"[DEBUG] IR Received: {ir_value}")
+            user_id = getattr(window, 'T9_KEYS', {}).get('userID', None)
+            if not user_id:
+                import json, os
+                settings_path = os.path.join(os.path.dirname(__file__), "settings.json")
+                if os.path.exists(settings_path):
+                    with open(settings_path, 'r') as f:
+                        settings = json.load(f)
+                        user_id = settings.get('userID', 'user')
+                else:
+                    user_id = 'user'
             if ir_value == 1:
                 event = QKeyEvent(QEvent.KeyPress, Qt.Key_Right, Qt.NoModifier)
                 print(f"[DEBUG] Sending Qt.Key_Right event to window.keyPressEvent")
@@ -76,7 +77,7 @@ if __name__ == "__main__":
                 print("Emergency! Send notification to Firebase.")
                 status, resp = notifier.send_topic_notification(
                     title="Emergency Alert!",
-                    body="Emergency IR signal received from user.",
+                    body=f"Emergency IR signal received from {user_id}.",
                     notif_type="EMERGENCY"
                 )
                 print(f"Notification sent: {status}, {resp}")
@@ -89,18 +90,28 @@ if __name__ == "__main__":
         orig_keyPressEvent(event)
         # Check for special keys after handling
         text = window.text_display.text()
+        user_id = getattr(window, 'T9_KEYS', {}).get('userID', None)
+        if not user_id:
+            import json, os
+            settings_path = os.path.join(os.path.dirname(__file__), "settings.json")
+            if os.path.exists(settings_path):
+                with open(settings_path, 'r') as f:
+                    settings = json.load(f)
+                    user_id = settings.get('userID', 'user')
+            else:
+                user_id = 'user'
         if text and text[-1] in ["🍽️", "🚽", "📞"]:
             if text[-1] == "🍽️":
-                body = "Meal notification triggered by user."
+                body = f"Meal notification triggered by {user_id}."
                 notif_type = "FOOD"
             elif text[-1] == "🚽":
-                body = "Restroom notification triggered by user."
+                body = f"Restroom notification triggered by {user_id}."
                 notif_type = "RESTROOM"
             elif text[-1] == "📞":
-                body = "Call notification triggered by user."
+                body = f"Call notification triggered by {user_id}."
                 notif_type = "DOCTOR_CALL"
             else:
-                body = "Special notification triggered by user."
+                body = f"Special notification triggered by {user_id}."
                 notif_type = None
             status, resp = notifier.send_topic_notification(
                 title="User Request",
@@ -113,17 +124,28 @@ if __name__ == "__main__":
 
     # Patch on_special_key to send notification for special emoji
     def send_special_notification(char):
+        user_id = getattr(window, 'T9_KEYS', {}).get('userID', None)
+        # Try to get userID from settings if not found in T9_KEYS
+        if not user_id:
+            import json, os
+            settings_path = os.path.join(os.path.dirname(__file__), "settings.json")
+            if os.path.exists(settings_path):
+                with open(settings_path, 'r') as f:
+                    settings = json.load(f)
+                    user_id = settings.get('userID', 'user')
+            else:
+                user_id = 'user'
         if char == "🍽️":
-            body = "Meal notification triggered by user."
+            body = f"Meal notification triggered by {user_id}."
             notif_type = "FOOD"
-        elif char == "🚽":
-            body = "Restroom notification triggered by user."
+        elif char == "��":
+            body = f"Restroom notification triggered by {user_id}."
             notif_type = "RESTROOM"
-        elif char == "📞":
-            body = "Call notification triggered by user."
+        elif char == "��":
+            body = f"Call notification triggered by {user_id}."
             notif_type = "DOCTOR_CALL"
         else:
-            body = "Special notification triggered by user."
+            body = f"Special notification triggered by {user_id}."
             notif_type = None
         status, resp = notifier.send_topic_notification(
             title="User Request",
@@ -135,4 +157,4 @@ if __name__ == "__main__":
     window.on_special_key = send_special_notification
     window.show()
     sys.exit(app.exec_())
-"""
+

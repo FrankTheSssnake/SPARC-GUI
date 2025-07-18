@@ -44,6 +44,7 @@ class NetworkWorker(QObject):
                 self._close_socket()
         except Exception as e:
             print(f"Network error: {e}")
+            self._close_socket()
         finally:
             self.running = False
             self.finished.emit()

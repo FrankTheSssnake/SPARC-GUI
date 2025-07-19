@@ -18,8 +18,8 @@ from notif import FCMNotifier
 if __name__ == "__main__":
     import os
     SETTINGS_PATH = os.path.join(os.path.dirname(__file__), "settings.json")
-    HOST = "192.168.1.13"
-    PORT = 33333
+    HOST = "192.168.120.13"
+    PORT = 45454
 
     network_manager = NetworkManager(HOST, PORT, SETTINGS_PATH)
 
@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     # At this point, the timeout is no longer needed and will not affect further network operations.
 
-    window = MainWidget()
+    window = MainWidget(network_manager=network_manager)
     # Example: connect IR data to controller
     if hasattr(window, 'controller'):
         def handle_ir(ir_value):
@@ -138,10 +138,10 @@ if __name__ == "__main__":
         if char == "🍽️":
             body = f"Meal notification triggered by {user_id}."
             notif_type = "FOOD"
-        elif char == "��":
+        elif char == "🚽":
             body = f"Restroom notification triggered by {user_id}."
             notif_type = "RESTROOM"
-        elif char == "��":
+        elif char == "📞":
             body = f"Call notification triggered by {user_id}."
             notif_type = "DOCTOR_CALL"
         else:

@@ -16,36 +16,77 @@ class NetworkWorker(QObject):
         self.sock = None
         self.running = True
 
+    # Replace your NetworkWorker.run() method with this debugged version:
+
     def run(self):
         try:
+            print(f"Attempting to connect to {self.host}:{self.port}")
             self.sock = socket.create_connection((self.host, self.port))
-            # self.sock.settimeout(None)  # Set to blocking mode after connecting
-            print("Connection Created.\n")
+            print("Socket connection established successfully!")
+            
+            # Set a timeout for the initial data reception
+            self.sock.settimeout(10.0)  # 5 second timeout
+            
             try:
-                # Receive initial settings
+                print("Waiting for initial settings data...")
                 initial = self.sock.recv(1024)
-                print(f"Raw initial data: {initial!r}")
+                print(f"Raw initial data received: {initial!r}")
+                print(f"Raw initial data length: {len(initial)}")
+                print(f"Raw initial data as string: '{initial.decode('utf-8', errors='ignore')}'")
+                
+                if len(initial) == 0:
+                    print("ERROR: Received empty data!")
+                    self.initial_settings_received.emit({})
+                    return
+                
                 settings = self.parse_initial_settings(initial)
                 print(f"Parsed settings: {settings}")
+                
+                if not settings:  # If settings is empty dict
+                    print("ERROR: Failed to parse settings!")
+                    self.initial_settings_received.emit({})
+                    return
+                    
                 self.save_settings(settings)
                 self.initial_settings_received.emit(settings)
-                print("Initial Settings Saved.\n")
-                # Listen for IR data
-                while self.running:
+                print("Initial Settings processed and saved successfully!")
+                
+            except socket.timeout:
+                print("ERROR: Timeout waiting for initial settings!")
+                self.initial_settings_received.emit({})
+                return
+            except Exception as e:
+                print(f"ERROR receiving initial settings: {e}")
+                self.initial_settings_received.emit({})
+                return
+            
+            # Remove timeout for subsequent operations
+            self.sock.settimeout(None)
+            
+            # Listen for IR data
+            while self.running:
+                try:
                     data = self.sock.recv(16)
                     if not data:
+                        print("Connection closed by server")
                         break
                     try:
                         value = int(data.strip())
+                        print(f"IR signal received: {value}")
                         self.ir_signal.emit(value)
-                    except Exception:
+                    except ValueError as e:
+                        print(f"Invalid IR data received: {data!r} - {e}")
                         continue
-            finally:
-                self._close_socket()
+                except socket.timeout:
+                    continue  # This shouldn't happen since we removed timeout
+                except Exception as e:
+                    print(f"Error receiving IR data: {e}")
+                    break
+                    
         except Exception as e:
-            print(f"Network error: {e}")
-            self._close_socket()
+            print(f"Connection error: {e}")
         finally:
+            self._close_socket()
             self.running = False
             self.finished.emit()
 
@@ -97,6 +138,7 @@ class NetworkWorker(QObject):
                 msg = f"SET_BLINKINT:{value}\n".encode()
             else:
                 msg = f"{key}={value}\n".encode()
+            print(f'Sending command: {msg}')
             self.sock.sendall(msg)
 
 class NetworkManager:

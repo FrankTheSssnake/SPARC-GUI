@@ -14,8 +14,9 @@ from PyQt5.QtCore import Qt
 
 
 class Settings(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, network_manager=None):
         super().__init__(parent)
+        self.network_manager = network_manager
         self.setWindowTitle("Settings")
         self.setObjectName("SettingsWindow")
         with open(os.path.join(os.path.dirname(__file__), "../styles/settings.qss"), "r") as f:

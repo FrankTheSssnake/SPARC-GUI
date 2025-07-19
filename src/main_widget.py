@@ -35,7 +35,7 @@ T9_KEYS = {
 
 
 class MainWidget(QWidget):
-    def __init__(self):
+    def __init__(self, network_manager=None):
         super().__init__()
 
         self.setWindowTitle("T9 Typing GUI")
@@ -49,6 +49,7 @@ class MainWidget(QWidget):
             self.setStyleSheet(f.read())
 
         self.T9_KEYS = T9_KEYS
+        self.network_manager = network_manager
 
         self.controller = Controller(self)
 
@@ -63,7 +64,7 @@ class MainWidget(QWidget):
         self.init_main_ui()
 
         # Create settings interface
-        self.settings_widget = Settings(self)
+        self.settings_widget = Settings(self, network_manager=network_manager)
 
         # Add widgets to stacked widget
         self.stacked_widget.addWidget(self.main_widget)

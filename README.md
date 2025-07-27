@@ -1,9 +1,5 @@
 # SPARC-GUI
 
-**Final Vision GUI**
-
-## Overview
-
 SPARC-GUI is a Python-based graphical user interface implementing the "final vision" for our IEEE SSCS 2025 Arduino Competition Deivce. It is designed to provide an accessible and intuitive text entry experience inspired by classic T9 keypads, leveraging modern GUI capabilities and customization options.
 
 ## Features
